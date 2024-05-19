@@ -13,6 +13,12 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Entities
         public Category Category { get; set; }
         public Guid CategoryId { get; set; }
 
+        public string Image { get; set; }
+
+        public int Quntity { get; set; }
+
+        public string Description { get; set; }
+
 
 
     }

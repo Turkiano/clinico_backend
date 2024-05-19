@@ -6,14 +6,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using sda_onsite_2_csharp_backend_teamwork.src.Databases;
+using sda_onsite_2_csharp_backend_teamwork.src.Enums;
 
 #nullable disable
 
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240508124249_UpdateProductEntity")]
-    partial class UpdateProductEntity
+    [Migration("20240515112943_testing")]
+    partial class testing
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +24,7 @@ namespace Backend.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "role", new[] { "customer", "admin" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.CustomerOrder", b =>
@@ -92,6 +94,9 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("pk_orders");
 
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_orders_user_id");
+
                     b.ToTable("orders", (string)null);
                 });
 
@@ -110,6 +115,16 @@ namespace Backend.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -118,6 +133,10 @@ namespace Backend.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer")
                         .HasColumnName("price");
+
+                    b.Property<int>("Quntity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quntity");
 
                     b.HasKey("Id")
                         .HasName("pk_products");
@@ -155,8 +174,8 @@ namespace Backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer")
+                    b.Property<Role>("Role")
+                        .HasColumnType("role")
                         .HasColumnName("role");
 
                     b.Property<int>("Salt")
@@ -180,10 +199,18 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<Guid?>("CustomerOrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_order_id");
+
                     b.Property<string>("OrderId")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("order_id");
+
+                    b.Property<Guid?>("OrderId1")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id1");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -197,7 +224,23 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("pk_order_items");
 
+                    b.HasIndex("CustomerOrderId")
+                        .HasDatabaseName("ix_order_items_customer_order_id");
+
+                    b.HasIndex("OrderId1")
+                        .HasDatabaseName("ix_order_items_order_id1");
+
                     b.ToTable("order_items", (string)null);
+                });
+
+            modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.src.Entities.Order", b =>
+                {
+                    b.HasOne("sda_onsite_2_csharp_backend_teamwork.src.Entities.User", null)
+                        .WithMany("Order")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_orders_users_user_id");
                 });
 
             modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.src.Entities.Product", b =>
@@ -212,9 +255,37 @@ namespace Backend.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.src.OrderItem", b =>
+                {
+                    b.HasOne("sda_onsite_2_csharp_backend_teamwork.CustomerOrder", null)
+                        .WithMany("OrderItem")
+                        .HasForeignKey("CustomerOrderId")
+                        .HasConstraintName("fk_order_items_customer_orders_customer_order_id");
+
+                    b.HasOne("sda_onsite_2_csharp_backend_teamwork.src.Entities.Order", null)
+                        .WithMany("OrderItem")
+                        .HasForeignKey("OrderId1")
+                        .HasConstraintName("fk_order_items_orders_order_id1");
+                });
+
+            modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.CustomerOrder", b =>
+                {
+                    b.Navigation("OrderItem");
+                });
+
             modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.src.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.src.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItem");
+                });
+
+            modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.src.Entities.User", b =>
+                {
+                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

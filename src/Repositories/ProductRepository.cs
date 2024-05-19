@@ -50,11 +50,27 @@ namespace sda_backend_teamwork.src.Controllers
         //     return paginated.ToList();
         // }
 
-        public IEnumerable<Product> FindAll(int limit, int page)
+        public IEnumerable<Product> FindAll(int limit, int page, string? search)
         {
             int offset = (page - 1) * limit;
+
+            // first, need to check whether search is null or not 
+            // if yes, then you will filter the name of the product based on the search keyword
+            // the return value will be the product that match the keyword
+            if (search is not null)
+            {
+                System.Console.WriteLine($"search keyword is no null {search}");
+                var productListBySearchKeyword = _products
+                                                    .Where(product => product.Name.ToLower().Contains(search.ToLower()))
+                                                    .Skip(offset)
+                                                    .Take(limit);
+                return productListBySearchKeyword;
+            }
+
+            // if no there is no keywrod, return whole list of products with pagination
             var paginated = _products.Skip(offset).Take(limit);
-            return paginated.ToList();
+            return paginated;
+
         }
 
         public Product? FindOne(Guid productId)

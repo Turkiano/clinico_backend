@@ -8,11 +8,11 @@ using sda_onsite_2_csharp_backend_teamwork.src.Services;
 
 namespace sda_onsite_2_csharp_backend_teamwork.src.Controller
 {
-    public class CategoryController : CostumeController
+    public class CategorieController : CostumeController
     {
         private ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategorieController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
