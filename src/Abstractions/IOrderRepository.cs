@@ -13,8 +13,7 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Abstractions
         public Order? FindOne(Guid orderId);
         public Order CreateOne(Order order);
         public bool DeleteOne(Guid orderId);
-
-
+        public Order UpdateOne(Order updateOrder);
 
     }
 }

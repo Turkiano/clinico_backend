@@ -13,8 +13,8 @@ using sda_onsite_2_csharp_backend_teamwork.src.Enums;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240515112943_testing")]
-    partial class testing
+    [Migration("20240527130926_UpdateIdType")]
+    partial class UpdateIdType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,18 +203,12 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("customer_order_id");
 
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
                         .HasColumnName("order_id");
 
-                    b.Property<Guid?>("OrderId1")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
-                        .HasColumnName("order_id1");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("text")
                         .HasColumnName("product_id");
 
                     b.Property<int>("Quantity")
@@ -227,8 +221,8 @@ namespace Backend.Migrations
                     b.HasIndex("CustomerOrderId")
                         .HasDatabaseName("ix_order_items_customer_order_id");
 
-                    b.HasIndex("OrderId1")
-                        .HasDatabaseName("ix_order_items_order_id1");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_order_items_order_id");
 
                     b.ToTable("order_items", (string)null);
                 });
@@ -264,8 +258,10 @@ namespace Backend.Migrations
 
                     b.HasOne("sda_onsite_2_csharp_backend_teamwork.src.Entities.Order", null)
                         .WithMany("OrderItem")
-                        .HasForeignKey("OrderId1")
-                        .HasConstraintName("fk_order_items_orders_order_id1");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_items_orders_order_id");
                 });
 
             modelBuilder.Entity("sda_onsite_2_csharp_backend_teamwork.CustomerOrder", b =>

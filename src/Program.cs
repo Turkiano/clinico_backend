@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Npgsql;
 using sda_backend_teamwork.src.Controllers;
 using sda_onsite_2_csharp_backend_teamwork;
@@ -13,6 +14,7 @@ using sda_onsite_2_csharp_backend_teamwork.src.Enums;
 using sda_onsite_2_csharp_backend_teamwork.src.Repositories;
 using sda_onsite_2_csharp_backend_teamwork.src.services;
 using sda_onsite_2_csharp_backend_teamwork.src.Services;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,21 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+     options =>
+    {
+        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Description = "Bearer token authentication",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Scheme = "Bearer"
+        }
+        );
+
+        options.OperationFilter<SecurityRequirementsOperationFilter>();
+    }
+);
 builder.Services.AddControllers();
 
 
@@ -92,7 +108,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-
 var app = builder.Build();
 app.MapControllers();// Should be added after the app variable
 
@@ -109,5 +124,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins); //this is to invoke the Cors to access between back-end & front-end
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

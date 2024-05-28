@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,12 +34,14 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Controllers
 
 
         [HttpPost] //to use this method, import AspNetCore
+        [Authorize(Roles = "Admin")]
         public Product CreateOne([FromBody] ProductCreateDto productCreateDto) //this is the body example to send data
         {
             return _productService.CreateOne(productCreateDto);//this is how we talk to service
         }
 
         [HttpDelete("{productId}")]
+        [Authorize(Roles = "Admin")]
         public Product? DeleteProduct(Guid productId)
         {
             return _productService.DeleteProduct(productId);
@@ -54,6 +57,17 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Controllers
 
             return Ok(product);
         }
+
+
+         [HttpPatch(":productId")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    public ActionResult<ProductReadDto> UpdateOne(Guid productId, [FromBody] ProductUpdateDto updatedProduct)
+    {
+        ProductReadDto product = _productService.UpdateOne(productId, updatedProduct);
+
+        return Accepted(product);
+
+    }
 
     }
 }

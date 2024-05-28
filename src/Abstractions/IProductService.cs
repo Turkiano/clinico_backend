@@ -14,6 +14,8 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Abstractions
 
         public ProductReadDto FindOne(Guid id);
 
+        public ProductReadDto UpdateOne(Guid id, ProductUpdateDto updatedProduct);
+
 
 
     }

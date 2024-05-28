@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using sda_onsite_2_csharp_backend_teamwork.src.Entities;
 using sda_onsite_2_csharp_backend_teamwork.src.Databases;
-namespace sda_onsite_2_csharp_backend_teamwork.src.Repositories;
+namespace sda_onsite_2_csharp_backend_teamwork.src.Repositories {
 
-[Route("[controller]")]
+
 public class OrderItemRepository : IOrderItemRepository
 {
     private DatabaseContext _databaseContext;
@@ -31,9 +32,13 @@ public class OrderItemRepository : IOrderItemRepository
 
     public OrderItem CreateOne(OrderItem newOrder)
     {
+        Console.WriteLine($"Create an order item in order item repo");
+
         _orderItems.Add(newOrder);
         _databaseContext.SaveChanges();
         return newOrder;
 
     }
+}
+
 }

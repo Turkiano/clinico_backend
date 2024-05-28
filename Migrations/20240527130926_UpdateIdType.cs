@@ -7,7 +7,7 @@ using sda_onsite_2_csharp_backend_teamwork.src.Enums;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class testing : Migration
+    public partial class UpdateIdType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -107,11 +107,10 @@ namespace Backend.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    order_id = table.Column<string>(type: "text", nullable: false),
-                    product_id = table.Column<string>(type: "text", nullable: false),
+                    order_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false),
-                    customer_order_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    order_id1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    customer_order_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -122,10 +121,11 @@ namespace Backend.Migrations
                         principalTable: "customer_orders",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "fk_order_items_orders_order_id1",
-                        column: x => x.order_id1,
+                        name: "fk_order_items_orders_order_id",
+                        column: x => x.order_id,
                         principalTable: "orders",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -134,9 +134,9 @@ namespace Backend.Migrations
                 column: "customer_order_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_order_items_order_id1",
+                name: "ix_order_items_order_id",
                 table: "order_items",
-                column: "order_id1");
+                column: "order_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_orders_user_id",

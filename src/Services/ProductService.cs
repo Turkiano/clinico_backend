@@ -62,5 +62,20 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Controllers
         }
 
 
+        public ProductReadDto? UpdateOne(Guid id, ProductUpdateDto updatedProduct)
+        {
+            Product? product = _productRepository.FindOne(id);
+            if (product is null) return null;
+
+
+            product.Name = updatedProduct.Name;
+            product.CategoryId = updatedProduct.CategoryId;
+
+            _productRepository.UpdateOne(product);
+
+            return _mapper.Map<ProductReadDto>(product);
+        }
+
+
     }
 }

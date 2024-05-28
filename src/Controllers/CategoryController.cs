@@ -18,13 +18,14 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Controller
         }
 
         [HttpGet]
-        // [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer,Admin")] //
         public ActionResult<IEnumerable<Category>> FindAll()
         {
             return Ok(_categoryService.FindAll());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Category> CreateOne([FromBody] CategoryCreateDto category)

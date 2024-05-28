@@ -6,6 +6,7 @@ using sda_onsite_2_csharp_backend_teamwork.src.Databases;
 using sda_onsite_2_csharp_backend_teamwork.src.Entities;
 
 
+
 namespace sda_onsite_2_csharp_backend_teamwork.src.Repositories
 {
     public class OrderRepository : IOrderRepository
@@ -13,12 +14,13 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Repositories
     {
 
         private DbSet<Order> _orders;
-        private DatabaseContext _DbSet;
+        private DatabaseContext _databaseContext;
 
         public OrderRepository(DatabaseContext databaseContext)
         {
+            _databaseContext = databaseContext;
             _orders = databaseContext.Orders;
-            _DbSet = databaseContext;
+
         }
 
         public IEnumerable<Order> FindAll()
@@ -36,16 +38,24 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Repositories
         public Order CreateOne(Order newOrder)
         {
             _orders.Add(newOrder);
-            _DbSet.SaveChanges();
+            _databaseContext.SaveChanges();
 
             return newOrder;
+        }
+
+        public Order UpdateOne(Order updateOrder)
+        {
+            _orders.Update(updateOrder);
+            _databaseContext.SaveChanges();
+
+            return updateOrder;
         }
 
         public bool DeleteOne(Guid orderId)
         {
             var deleteOrder = FindOne(orderId);
             _orders.Remove(deleteOrder!);
-            _DbSet.SaveChanges();
+            _databaseContext.SaveChanges();
 
             return true;
         }
