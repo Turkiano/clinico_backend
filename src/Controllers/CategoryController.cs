@@ -18,7 +18,6 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Controller
         }
 
         [HttpGet]
-        [Authorize(Roles = "Customer,Admin")] //
         public ActionResult<IEnumerable<Category>> FindAll()
         {
             return Ok(_categoryService.FindAll());

@@ -24,12 +24,12 @@ namespace sda_onsite_2_csharp_backend_teamwork.src.Controllers
 
         [HttpGet]
         public IEnumerable<Product> FindAll([FromQuery] int limit = 5, [FromQuery] int page = 1,
-                                            [FromQuery] string? search = null)
+                                            [FromQuery] string? search = null, Guid? filter = null)
         {
 
             Console.WriteLine($"search {search}");
 
-            return _productService.FindAll(limit, page, search); // this to run the method to get all the products
+            return _productService.FindAll(limit, page, search, filter); // this to run the method to get all the products
         }
 
 
