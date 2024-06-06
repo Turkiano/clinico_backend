@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using sda_onsite_2_csharp_backend_teamwork.src.Abstractions;
 using sda_onsite_2_csharp_backend_teamwork.src.Controllers;
 using sda_onsite_2_csharp_backend_teamwork.src.Entities;
-using sda_onsite_2_csharp_backend_teamwork.src.Repositories;
-using sda_onsite_2_csharp_backend_teamwork.src.services;
-using sda_onsite_2_csharp_backend_teamwork.src.Services;
+
 
 namespace sda_onsite_2_csharp_backend_teamwork.src
 {
@@ -57,7 +55,7 @@ namespace sda_onsite_2_csharp_backend_teamwork.src
 
 
         [Authorize(Roles = "Admin, Customer")]
-        [HttpPost("/checkout")]
+        [HttpPost("Order/checkout")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Order> Checkout([FromBody] List<CheckoutCreateDto> orderItemCreate) //this is to see the order list as array
