@@ -55,7 +55,7 @@ namespace sda_onsite_2_csharp_backend_teamwork.src
 
 
         [Authorize(Roles = "Admin, Customer")]
-        [HttpPost("Order/checkout")]
+        [HttpPost("checkout")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Order> Checkout([FromBody] List<CheckoutCreateDto> orderItemCreate) //this is to see the order list as array
