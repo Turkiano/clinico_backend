@@ -92,3 +92,23 @@ POST /api/auth/login
 🌍 CORS Support for frontend-backend integration.
 
 🧪 Input Validation for all endpoints.
+
+
+
+🤝 Contributing Guidelines
+----------------------------------------------------
+Fork the repository
+
+Create your feature branch (git checkout -b feature/yourFeature)
+
+Commit your changes (git commit -m 'Add your feature')
+
+Push to the branch (git push origin feature/yourFeature)
+
+Open a Pull Request
+
+
+
+📄 License Information
+This project is licensed under the MIT License.
+See the LICENSE file for details.
